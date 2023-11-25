@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+    <style>
+        form p{
+            font-size: 50px;
+            text-align: center;
+            font-family: 华文黑体;;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid white;
+            background-color: #eee9e9;
+        }
+        th{
+               padding: 20px;/*内边距*/
+               }
+        td{
+               padding: 20px;
+              text-align: center;
+               }
+         /*内容里的斑马线*/
+        tbody tr:nth-child(2n+1){
+              background-color: #f3dede;
+          }
+         tbody tr:nth-child(2n){
+               background-color: white;
+               }
+
+        input{
+            background-color: #ef4e69;
+            border-radius: 8px;/*圆角*/
+            border:red ;
+            font-size: 15px;
+            color: white;
+        }
+        /*容器*/
+        .container{
+            width: 100%;
+            height:100vh;
+            margin: 0 auto;
+        }
+        /*左侧边栏*/
+        .left{
+            width: 230px;
+            height: 100vh;
+            float: left;
+            background-color: #f3f6f1;
+        }
+        /*头部*/
+        .head{
+            width:calc(100% - 230px);
+            height: 40px;
+            float:right ;
+            background-color: #f1e5e5;
+        }
+        /*内容*/
+        #connect {
+            width:calc(100% - 230px);
+            height: calc(100vh - 40px - 20px);
+            float: right;
+        }
+
+        #footer{
+              width:calc(100% - 230px);
+              height: 20px;
+            float: right;
+            background-color: #eac4b7;
+          }
+
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="head"></div>
+    <div class="left"></div>
+    <div id="connect">
+        <form method="post" action="#" name="listform">
+        <p>商品列表</p>
+            <input class="btn1" type="button" onclick="addGoods()" value="添加商品"><br>
+                <table  id="mytable" width="90%" border="1" align="center" cellspacing="1" cellpadding="5">
+                    <thead id="thead">
+                    <tr>
+<!--                        7个信息-->
+                        <th>序号</th>
+                        <th>商品编码</th>
+                        <th>商品名称</th>
+                        <th>单位</th>
+                        <th>零售价</th>
+                        <th>批发价</th>
+                        <th>可用库存</th>
+                        <th colspan="2">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="mytbody">
+
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    </table>
+        </form>
+</div>
+    <div id="footer">有问题请联系我们哟！亲。联系方式：13929712013</div>
+</div>
+
+<script>
+
+    //模拟数据，将goodslist保存在sessionStorage里面
+    // 初始化表格
+    initTable();
+
+    function  initTable(){
+        //模拟从数据库获得数据，填充表格
+        // 从临时存储里获得商品列表，转成jsno数组
+        let goodslist=sessionStorage.getItem('goodslist');
+        // 如果第一次进入此页面goodslist不存在，手工初始化这个对象
+        if (!goodslist) {
+            //若不存在，则构造一个存入sessionStorage中
+            goodslist = [
+                {
+                   goodsId:1,//序号
+                    goods_no:'4803000000',//商品编码
+                    goods_name:'矿泉水',//商品名称
+                    unit:5,//单位
+                    retail_price:10,//零售价
+                    trade_price:5, // 批发价
+                    number:100,// 可用库存
+                    goods_info:'矿泉水是从地下深处自然涌出的或者是经人工揭露的、未受污染的地下矿水；' +
+                        '含有一定量的矿物盐、微量元素或二氧化碳气体；在通常情况下，其化学成分、流量、' +
+                        '水温等动态在天然波动范围内的相对稳定。矿泉水是在地层深部循环形成的，含有国家标准规定的矿物质及限定指标。'
+                },
+                {
+                    goodsId:2,
+                    goods_no:'2003031587',
+                    goods_name:'台灯',
+                    unit:4,
+                    retail_price:15,
+                    trade_price:14.9,
+                    number:866,
+                    goods_info:'随着科技的进步，台灯的外观、造型在不断地发展，并逐渐出现了能够吸附在任意位置的磁吸式台灯，其小巧精致，方便携带。' +
+                        '台灯的作用主要是照明，便于阅读、学习、工作等，台灯已经远远超越了其本身的价值，甚至已经变成了一个艺术品。'
+                },
+                {goodsId:3,
+                goods_no:'21213312387',
+                goods_name:'电水壶',
+                unit:3,
+                retail_price:15,
+                trade_price:6,
+                number:100,
+                goods_info:'电水壶在1891年诞生于芝加哥。随着科技的发展，快捷、安全、便利、充分利用能源日渐成为了水壶的主要特点，嗜茶的英国人从此便爱上它了。' +
+                    '到了二十一世纪便成为全球的畅销品。电水壶采用的是蒸气智能感应控温，具有水沸腾后自动断电、防干烧断电的功能。随着生活的需要，现在的电水壶' +
+                    '也正在向多功能方向发展，如防漏、防烫、锁水等。电水壶具有加热速度快，保温效果好，过滤功能强，式样多等优点。'
+                },
+                {goodsId:4,
+                    goods_no:'21213139997',
+                    goods_name:'羽毛球拍',
+                    unit:6,
+                    retail_price:88,
+                    trade_price:69.9,
+                    number:20,
+                    goods_info:'羽毛球是一项室内、室外都可以进行的体育运动。依据参与的人数，可以分为单打与双打，及新兴的3打3。羽毛球拍由：拍面、拍杆、拍柄及拍框与' +
+                        '拍杆的接头构成。一支球拍的长度不超过680毫米，其中球拍柄与球拍杆长度不超过41厘米，拍框长度为28厘米，宽为23厘米，随着科学技术的发展，球拍的' +
+                        '发展向着重量更轻、拍框更硬、拍杆弹性更好的方向发展。'
+                },
+                {
+                    goodsId: 5,
+                    goods_no: '256611137',
+                    goods_name: '篮球',
+                    unit: 3,
+                    retail_price: 130,
+                    trade_price: 99,
+                    number: 1001,
+                    goods_info: '篮球（basketball），是以手为中心的身体对抗性体育运动，是奥运会核心比赛项目 [1]。' +
+                        '1891年12月21日，由美国马萨诸塞州斯普林菲尔德基督教青年会训练学校体育教师詹姆士·奈史密斯发明 [2]。' +
+                        '1896年，篮球运动传入中国天津。'
+                }
+            ]
+            sessionStorage.setItem('goodslist',JSON.stringify(goodslist));
+        }else{
+            //如果session Storage中已经有goodslist，取出，转为对象
+            goodslist=JSON.parse(sessionStorage.getItem('goodslist'));
+        }
+
+        //往表格中添加行数据
+        let mytbody=document.querySelector('#mytbody');//1.获得表格容器
+        //循环
+        goodslist.forEach(goods=>{
+            let row_num=mytbody.rows.length;//得到当前表格的行数
+            let newRow=mytbody.insertRow(row_num);//插入新航，已row_num为新行的索引index
+            //插入新的单元格
+            let cell0=newRow.insertCell(0);
+            //给单元格赋值
+            cell0.innerHTML=(row_num+1).toString();
+
+
+            let cell1=newRow.insertCell(1);
+            cell1.innerHTML=goods.goods_no;
+
+            let cell2=newRow.insertCell(2);
+             cell2.innerHTML='<a onclick="goodsinfo(this)" href="goodsinformation.html">'+goods.goods_name+'</a>';
+
+            let cell3 = newRow.insertCell(3);
+            if(goods.unit == 0){
+                cell3.innerHTML = '袋';
+            }else if(goods.unit == 1){
+                cell3.innerHTML = '千克';
+            }else if(goods.unit == 2){
+                cell3.innerHTML = '箱';
+            }else if(goods.unit == 3){
+                cell3.innerHTML = '个';
+            }else if(goods.unit == 4){
+                cell3.innerHTML = '盏';
+            }else if(goods.unit == 5){
+                cell3.innerHTML = '瓶';
+            }else if(goods.unit == 6){
+                cell3.innerHTML = '件';
+            }else if(goods.unit == 7){
+                cell3.innerHTML = '块';
+            }
+
+            let cell4 = newRow.insertCell(4);
+            cell4.innerHTML=goods.retail_price;
+
+            let cell5 = newRow.insertCell(5);
+            cell5.innerHTML=goods.trade_price;
+
+            let cell6 = newRow.insertCell(6);
+            cell6.innerHTML=goods.number;
+
+            let cell7= newRow.insertCell(7);
+            cell7.innerHTML='<input type="button" onclick="changeGoods(this)" class="change" value="修改">';
+
+            let cell8 = newRow.insertCell(8);
+            cell8.innerHTML='<input type="button" onclick="deleteGoods(this)" class="delete" value="删除">';
+
+
+        })
+    }
+
+    function addGoods() {
+        location.href = 'goodsadd.html';//跳转到添加商品页面
+    }
+
+    function changeGoods(obj) {
+        //传进来的是一个按钮对象，通过按钮得到当前行
+        let currentRow=(obj.parentElement).parentElement;
+        //得到当前行索引
+        let index=currentRow.sectionRowIndex;
+
+//把选中的行索引放进sessionStorage,供修改页面使用
+        sessionStorage.setItem('selectedIndex', index);
+        location.href = 'goodschange.html';
+    }
+
+
+
+    function deleteGoods(obj) { //删除商品
+//1.1传进来的是一个按钮对象，通过按钮得到当前行
+        let currentRow=(obj.parentElement).parentElement;
+//1.2得到当前行索引
+        let index=currentRow.sectionRowIndex;
+//2 从sessionStorage获得数据
+        let goodslist = JSON.parse(sessionStorage.getItem('goodslist'));
+//3 从goodslist删除指定位置的元素
+        if(confirm('确定要删除这条数据吗')==true){
+            goodslist.splice(index, 1);
+        }
+            else {
+            location.href='goodslist.html';
+        }
+
+//4 把表格存回sessionStorage
+        sessionStorage.setItem("goodslist", JSON.stringify(goodslist));
+//5 删除表格选中的行
+        let mytbody = document.querySelector('#mytbody');
+        mytbody.deleteRow(index);
+    }
+
+    function goodsinfo(obj){
+        let presentRow=(obj.parentElement).parentElement;
+        let present_index=presentRow.sectionRowIndex;
+        sessionStorage.setItem('selectedIndex',present_index);//使用 sessionStorage 创建一个本地存储的 name/value 对
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>商品添加</title>
+    <style>
+        fieldset{
+            margin-left: 30px;
+        }
+        form table{
+            text-align: center;
+            font-size: 20px;
+            table-layout: fixed;
+            width: 100%;
+        }
+        table input{
+            width: 50%;
+            height: 40px;
+            font-size: 15px;
+            border-radius: 5px;
+            color: black;
+            font-family: 华文黑体;
+        }
+        table tr:nth-child(2n+1){
+            background: azure;
+        }
+        /*偶数行背景*/
+        table tr:nth-child(2n){
+            background: rgba(238, 131, 131, 0.2);
+            /*色相，饱和度，亮度*/
+            background-color: white;
+        }
+        div input{
+            width: 80px;
+            height: 30px;
+            margin: 20px;
+            float: right;
+            background-color: #ef4e69;
+            border-radius: 8px;
+            border:red ;
+            font-size: 15px;
+            color: #1d2622;
+
+        }
+        select{
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+<fieldset>
+    <legend style="font-size: 35px">添加商品</legend>
+<form id="frmbook" method="post">
+    <table width="100%" align="center" border="0" cellspacing="5" cellpadding="10">
+        <tr>
+            <td>
+                <from id="frmBook" method="post">
+                    <table width="100%"
+                           align="center"
+                           border="1"
+                           cellspacing="0"
+                           cellpadding="10">
+                        <tr>
+                            <td>商品名称</td>
+                            <td><input type="text" id="goodsName" name="goodsName"></td>
+                        </tr>
+                        <tr>
+                            <td>商品编码</td>
+                            <td><input type="text" id="goodsno" name="goodsno"></td>
+                        </tr>
+                        <tr>
+                            <td>单位</td>
+                            <td><select id="unit">
+                                <option value="0">袋</option>
+                                <option value="1">千克</option>
+                                <option value="2">箱</option>
+                                <option value="3">个</option>
+                                <option value="4">盏</option>
+                                <option value="5">瓶</option>
+                                <option value="6">件</option>
+                                <option value="7">块</option>
+                            </select>
+                        </tr>
+                        <tr>
+                            <td>零售价</td>
+                            <td><input type="text" id="signal" name="signal"></td>
+                        </tr>
+                        <tr>
+                            <td>批发价</td>
+                            <td><input type="text" id="whole" name="whole"></td>
+                        </tr>
+                        <tr>
+                            <td>可用库存</td>
+                            <td><input type="text" id="availibity"></td>
+                        </tr>
+                    </table>
+                </from>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input type="button" onclick="save()" value="保存">
+        <input type="reset" value="重置">
+        <input type="button" onclick="cancel()" value="取消">
+    </div>
+</form>
+</fieldset>
+<script>
+    function save(){
+        //根据要选择的商品单位，设计下拉框选中状态
+        let unitValue=0;
+        let units=document.getElementById('unit');
+        let kuang=units.options;
+        for (let i=0;i<kuang.length;i++){
+            if (kuang[i].selected){
+                    unitValue=kuang[i].value;
+            }
+        }
+
+        let goods={
+            goodsId:parseInt((Math.random()*1000).toString()),//序号用随机数
+            goods_no: document.querySelector('#goodsno').value,
+           goods_name: document.querySelector('#goodsName').value,
+            unit: unitValue,
+            retail_price: document.querySelector('#signal').value,
+            trade_price: document.querySelector('#whole').value,
+            number: document.querySelector('#availibity').value
+        }
+
+        let goodslist=JSON.parse(sessionStorage.getItem('goodslist'));
+        goodslist.push(goods);
+
+//保存进sessionStorage
+        sessionStorage.setItem('goodslist',JSON.stringify(goodslist))//以字符串存入
+        location.href='goodslist.html';
+    }
+    function cancel(){
+        location.href='goodslist.html';//跳转回列表页面
+
+    }
+</script>
+</body>
+</html>
